@@ -41,7 +41,8 @@ i love computer,Techology benefits mankind,and code achieves history
 ### Java基础
 **知识点/面试题:**(必看:+1: )
 1. **[枚举](Java/Java基础知识/枚举.md)**
-2. **[Java 基础知识疑难点/易错点](docs/java/basis/Java基础知识疑难点.md)**
+2. **[Stream过程流](Java/Java基础知识/集合底层原理/Stream.md)**
+3. **[Java 基础知识疑难点/易错点](docs/java/basis/Java基础知识疑难点.md)**
 
 **重要知识点详解：**
 
