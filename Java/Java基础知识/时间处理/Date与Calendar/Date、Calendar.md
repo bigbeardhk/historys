@@ -4,3 +4,5 @@
 - long getTime():  获取其时间戳
 - boolean before(Date when):  
 - boolean after(Date when):  
+- static Date from(Instant instant): 
+- Instant toInstant():  
