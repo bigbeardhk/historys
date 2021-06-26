@@ -1,1 +1,8 @@
 exportVOList.parallelStream().forEach((t) -> log.info(toString()));
+   .filter(v -> "2".equals(v.getOrgLevel()))
+//                .map(OrganizationVO::getId).toArray(Long[]::new);
+
+        Long[] buIds = userBus.toArray(new Long[0]);
+
+        //导出
+        //1.简历buId在当前登录人权限下
