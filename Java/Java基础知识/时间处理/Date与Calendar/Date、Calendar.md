@@ -1,6 +1,10 @@
 
 >  JDK8中，考虑使用Instant 代替 Date， LocalDateTime 代替 Calendar，DateTimeFormatter 代替 SimpleDateFormat。
 
+https://www.cnblogs.com/lxx2014/p/9394841.html
+
+https://blog.csdn.net/pxy_1996/article/details/103049362
+
 ## Date类
 > 常用方法
 - Date(long date):  通过时间戳获取对象
