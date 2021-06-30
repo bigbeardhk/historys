@@ -15,7 +15,10 @@ https://blog.csdn.net/pxy_1996/article/details/103049362
 - Instant toInstant():  Date装换为Instant类型
 
 
-
 ## Calendar类
-> 常用方法
-- 
+>  Calendar为抽象类，由于语言敏感性，Calendar类在创建对象时并非直接创建，而是通过静态方法创建
+>  常用方法
+-  static getInstance() : 使用默认时区和语言环境获取一个日历!
+> Calendar c = Calendar.getInstance();  //返回当前时间
+-  int get(int field) :  获取时间字段值
+>  YEAR 年    MONTH 月,从0开始算起,最大11;0代表1月,11代表12月。  DATE 天   HOUR 时   MINUTE分   SECOND秒
