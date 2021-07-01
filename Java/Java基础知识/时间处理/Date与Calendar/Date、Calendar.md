@@ -13,8 +13,8 @@
 - long getTime():  获取其时间戳
 - boolean before(Date when):  A是否比B时间早
 - boolean after(Date when):  A是否比B时间晚
-- static Date from(Instant instant): Instant装换为Date类型
-- Instant toInstant():  Date装换为Instant类型
+- static Date from(Instant instant)
+- Instant toInstant()  
 
 ## Calendar类
 >  Calendar为抽象类(日历)，由于语言敏感性，Calendar类在创建对象时并非直接创建，而是通过静态方法创建
@@ -23,7 +23,8 @@
 -  final void set(int year, int month, int date)//设置某个日历时期,   
 -  int get(int field) :  获取时间字段值,比如当前的年份,月份值-1,日份等
 -  void add(int field,int amount)   //指定字段增加某值
-
+-  final Date getTime()  
+-  final void setTime(Date date) 
 <details>
 <summary>代码演示:</summary>
 
@@ -49,4 +50,30 @@
 ```
 
 </details>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
