@@ -19,3 +19,4 @@ ALTER  TABLE  table_name   DROP COLUMN;
 ### 增加字段
 
 ALTER TABLE  table_name   ADD COLUMN  show_flag  tinyint(4)  DEFAULT NULL COMMENT '是否应该出现在offer沟通栏(0 出现 1 不出现)' AFTER delete_flag;
+
