@@ -21,6 +21,10 @@
 - static Period between(LocalDate startDateInclusive, LocalDate endDateExclusive) //获取两段日期的日期段
 - int getDays() //获取天数
 
+注意:
+> getDays()并不能表示相差的天数,而是表示两个日期数值的差数!<p>
+> 如: 2019-05-12 与 2021-06-22之间between()后的getDays()数值为: 10,而不是两年又一个月多的天数
+
 ### Duration类
 > 时序时段的描述类,与Period类不同,它是对时间差的叙述,提供单位为天,时,分,最小为纳秒
 - static Duration between(Temporal startInclusive, Temporal endExclusive) //Temporal类不能为LocalDate
