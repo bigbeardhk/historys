@@ -10,11 +10,27 @@
 ## Date类
 ### 常用方法
 - Date(long date):  通过时间戳获取对象
-- long getTime():  获取其时间戳
+- long getTime():  获取其时间戳(毫秒差,January 1, 1970, 00:00:00 GMT)
 - boolean before(Date when):  A是否比B时间早
 - boolean after(Date when):  A是否比B时间晚
 - static Date from(Instant instant)
 - Instant toInstant()  
+
+### 时间转换
+- 小时: 1000 * 60 * 60
+- 天: 1000 * 60 * 60 * 24
+
+<details>
+<summary>代码演示:</summary>
+
+```Java
+        long minutes = smdate.getTime();
+        long maxminutes = bdate.getTime();
+        long l = maxminutes - minutes;
+        BigDecimal between_hours=new BigDecimal(l).divide(BigDecimal.valueOf(1000 * 60 * 60),1, RoundingMode.HALF_UP);
+```
+
+</details>
 
 ## Calendar类
 >  Calendar为抽象类(日历)，由于语言敏感性，Calendar类在创建对象时并非直接创建，而是通过静态方法创建
