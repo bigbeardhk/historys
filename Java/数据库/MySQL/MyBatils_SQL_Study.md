@@ -22,6 +22,7 @@ if (!CollectionUtils.isEmpty(interviewer.getInterviewerTypeList())){
 if (!StringUtils.isEmpty(interviewer.getInterviewLanguage())){
 	criteria.andLike("interviewLanguage","%"+ interviewer.getInterviewLanguage() +"%");
 }
+criteria.setOrderByClause("resume_id desc,created_time desc limit 0,1");
 List<ODMInterviewerInformationT> list = interviewerInformationTDao.selectByExample(example);
 
 
