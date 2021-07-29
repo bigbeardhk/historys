@@ -1,4 +1,7 @@
 ## DDL
+> 资料:</p>
+> ~[MySQL常用关键字与函数](https://blog.csdn.net/weixin_44478196/article/details/106750347?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_title~default-0.control&spm=1001.2101.3001.4242)</p>
+> ~[MySQL数据库中插入数据的几种方式](https://blog.csdn.net/weixin_44478196/article/details/115679245)</p>
 > 数据定义语句
 
 ### 修改字段
