@@ -56,15 +56,13 @@ System.out.println(num);
 - int getMonthValue()
 - Month getMonth()
 - DayOfWeek getDayOfWeek()
-<details>
-<summary>代码演示:</summary>
-
+  
+### Date转化为LocalDate
+  
 ```
 Date date = new Date();
 Instant createInstant = date.toInstant();
 LocalDate createDate = createInstant.atZone(ZoneId.systemDefault()).toLocalDate();
 ```
-
-</details>
 
 
