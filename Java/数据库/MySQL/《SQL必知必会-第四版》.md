@@ -47,6 +47,11 @@ SELECT CONCAT(TRIM(sname),'【',TRIM(age),'】') name
 ```
 
 ### 第八课 使用函数处理数据
+- 使用函数注意:
+> 每一个DBMS 都有特定的函数。事实上，只有少数几个函数被所有主要的DBMS等同地支持,所以会导致SQL的可移植性差,如果你决定使用函数，应该保证做好代码注释，以便以后你（或其他人）能确切地知道所编写的SQL 代码的含义。
+- [MySQL 学习笔记 —— 8、使用函数处理数据](https://blog.csdn.net/un357951/article/details/109358425?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-5.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-5.control)
+- 常见的几个函数
+> - UPPER() 将文本转换为大写: select UPPER(name)
 
 ### 第九课 聚合函数
 - SQL聚合函数: 前面4个函数都会忽略列值为NULL的行,COUNT(column)也会忽略,COUNT(*)不会忽略;
@@ -247,6 +252,21 @@ select @uname as username;
    + INOUT参数集合了IN和OUT类型的参数功能；
    + INOUT调用时传入的是变量，而不是常量；
 
+### 第19课 MySQL使用变量查询
+> [MySQL -- 定义变量并在sql语句中使用变量](https://blog.csdn.net/Aeve_imp/article/details/101759258?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-2.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-2.control)
+
+<details>
+<summary>代码学习:</summary>
+
+```sql
+INSERT INTO Department ( Id, NAME) VALUES( NULL, 'Math' );
+-- 定义变量,并将上一个新增的自增主键值赋值给这个变量
+SET @modelId = (SELECT @@identity);
+-- 使用变量
+INSERT INTO Course ( Id, cname, Did ) VALUES( NULL, '数学2', @modelId);
+```
+
+</details>
 
 ### 第20 课 管理事务处理
 #### 1.事务处理
@@ -261,6 +281,37 @@ select @uname as username;
 作。事务处理中可以使用这些语句，但进行回退时，这些操作也不撤销。
 
 ### 第21 课 使用游标
+>[MySQL 游标的使用](https://www.cnblogs.com/oukele/p/10684639.html)
+
+<details>
+<summary>代码学习:</summary>
+
+```sql
+-- delimiter // 标识一个SQL结束,防止遇到;就以为是一个SQL结束(有点DBMS可能不需要)
+delimiter //
+create procedure p1()
+begin
+    declare id int;
+    declare name varchar(100) character set utf8;
+    declare done int default 0;
+    -- 声明游标 (declare 游标名 cursor for 查询语句)
+    declare mc cursor for select stuId,stuName from student where stuAge >19;
+    -- 指定游标循环结束时的返回值
+    declare continue handler for not found set done = 1;
+    -- 打开游标
+    open mc;
+    -- 获取结果(注意into的顺序)
+    fetch mc into id,name;
+    -- 这里是为了显示获取结果
+    select id,name;
+    -- 关闭游标
+    close mc;
+end //
+delimiter ;
+```
+
+</details>
+
 
 ### 第22 课 SQL的高级特性
 #### 1.约束
