@@ -350,6 +350,28 @@ Q:查询某张表的下一个自增主键值?
   + 并非所有数据都适合做索引。取值不多的数据（如州）不如具有更多可能值的数据（如姓或名），能通过索引得到那么多的好处。
   + 索引用于数据过滤和数据排序。如果你经常以某种特定的顺序排序数据，则该数据可能适合做索引。
   + 可以在索引中定义多个列（例如，州加上城市）。这样的索引仅在以州加城市的顺序排序时有用。如果想按城市排序，则这种索引没有用处。
+ 
+ <details>
+<summary>代码学习:</summary>
+
+```sql
+1.添加PRIMARY KEY（主键索引）
+mysql>ALTER TABLE `table_name` ADD PRIMARY KEY ( `column` ) 
+
+2.添加UNIQUE(唯一索引) 
+mysql>ALTER TABLE `table_name` ADD UNIQUE ( `column` ) 
+
+3.添加INDEX(普通索引) 
+mysql>ALTER TABLE `table_name` ADD INDEX index_name ( `column` ) 
+
+4.添加FULLTEXT(全文索引) 
+mysql>ALTER TABLE `table_name` ADD FULLTEXT ( `column`) 
+
+5.添加联合索引 
+mysql>ALTER TABLE `table_name` ADD INDEX index_name ( `column1`, `column2`, `column3` )
+```
+</details>
+
 6. 触发器
 > 触发器是特殊的存储过程，它在特定的数据库活动发生时自动执行。触发器可以与特定表上的INSERT、UPDATE 和DELETE 操作（或组合）相关联。
 
