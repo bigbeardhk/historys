@@ -8,7 +8,8 @@
 
 - 修改字段类型
 
-alter table 表名 modify column 字段名 [修改后的字段类型];
+alter table 表名 modify column 字段名 [修改后的字段类型];</p>
+ALTER TABLE odrm_process_instance_t MODIFY COLUMN cc_account VARCHAR ( 500 ) DEFAULT NULL COMMENT '抄送人账号';
 
 - 修改字段(包括字段名,字段类型,字段备注等)
 
