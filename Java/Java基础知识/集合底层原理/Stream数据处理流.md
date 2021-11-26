@@ -28,4 +28,8 @@
 ```
 
 </details>
-
+    
+### 排序
+> // 取出最近的一条做SLA规则 </p>
+> slaResume = matchOldResumes.stream().max(Comparator.comparingLong(ResumeSlaStatus ::getResumeId)).get();
+    
