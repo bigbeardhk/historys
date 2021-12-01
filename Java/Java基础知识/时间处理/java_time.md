@@ -17,7 +17,7 @@
 
 ## 常见api
 ### Date转化为LocalDate
-  
+
 ```
 Date date = new Date();
 Instant createInstant = date.toInstant();
@@ -25,7 +25,61 @@ LocalDate createDate = createInstant.atZone(ZoneId.systemDefault()).toLocalDate(
 ```
 
 ### 日期相差时间问题
-#### 
+#### 1.ChronoUnit-between()的简单理解;
+- 1. 如: long days = ChronoUnit.MONTHS.between(startDate, endDate);</p>
+> 其真正含义为:两个日期的相差0.1个月份,只不过返回整数值0; </p>
+- 2. 月份相差的计数
+> (y1,M1,d1)与(y2,M2,d2) y1-y2 = m; M1-M = n;</p>
+> 如果d1<d2,相差的月份就12m+n-1,则,d1>=d2,就为12m+n;
+<details>
+<summary>代码演示:</summary>
+
+```
+LocalDate startDate = LocalDate.of(2021, 10, 31);
+LocalDate endDate = LocalDate.of(2021, 11, 30);
+LocalDate endDate2 = LocalDate.of(2021, 12, 01);
+long months = ChronoUnit.MONTHS.between(startDate, endDate); // 返回值:0
+long months = ChronoUnit.MONTHS.between(startDate, endDate2); // 返回值:1
+
+long years = ChronoUnit.YEARS.between(startDate, endDate); 
+long weeks = ChronoUnit.WEEKS.between(startDate, endDate);
+long days = ChronoUnit.DAYS.between(startDate, endDate);
+```
+</details>
+
+#### 2.X个月份内有效日期的判断
+<details>
+<summary>代码演示:</summary>
+
+```
+LocalDate startDate = LocalDate.of(2021, 10, 31);
+LocalDate endDate = LocalDate.of(2022, 02, 28);
+LocalDate endDate2 = startDate.plusMonths(4); //2022-02-28
+long months = ChronoUnit.MONTHS.between(startDate, endDate2); // 返回值:3
+```
+
+```java
+  /**
+     * 判断现在时间是否超过起始时间的有效期
+     *
+     * @param date 起始时间
+     * @return turn 超过有效期
+     */
+    private boolean whetherTheSpecifiedTimeIsExceeded(Date date) {
+        String itemName = userUtiltools.getItemName(LookupType.ONLINE_APPEAL);
+        int house = Integer.parseInt(itemName); //获取有效时个数
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime localDateTime = now.plusHours(-house);
+        if (date == null) {
+            return true;
+        }
+        LocalDateTime dateOfLD = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        return dateOfLD.isBefore(localDateTime);
+    }
+```
+</details>
+
+
 
 
 
