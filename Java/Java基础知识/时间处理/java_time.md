@@ -16,6 +16,22 @@
 - 右侧层是辅助工具类，如：日期时间格式、日期时间调整器、其他的日历系统；
 
 ## 常见api
+### Date转化为LocalDate
+  
+```
+Date date = new Date();
+Instant createInstant = date.toInstant();
+LocalDate createDate = createInstant.atZone(ZoneId.systemDefault()).toLocalDate();
+```
+
+### 日期相差时间问题
+#### 
+
+
+
+
+---
+## 不常见api
 ### Period类
 > 持续周期的描述类,一般表示两个LocalDate之间相差多少天,多少周等,可以表示的周期单位为**年,月,周,天**(不能表示小时及以下时间单位!)
 - static Period between(LocalDate startDateInclusive, LocalDate endDateExclusive) //获取两段日期的日期段
@@ -57,12 +73,6 @@ System.out.println(num);
 - Month getMonth()
 - DayOfWeek getDayOfWeek()
   
-### Date转化为LocalDate
-  
-```
-Date date = new Date();
-Instant createInstant = date.toInstant();
-LocalDate createDate = createInstant.atZone(ZoneId.systemDefault()).toLocalDate();
-```
+
 
 
