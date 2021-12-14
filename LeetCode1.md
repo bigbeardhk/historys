@@ -1,10 +1,5 @@
 
 ```java
-
-/*
- * Copyright (c) Huawei Technologies Co., Ltd. 2021-2021. All rights reserved.
- */
-
 package com.huawei.it.omp.odrm.service.resume.impl;
 
 import com.huawei.it.auth.util.StringUtils;
