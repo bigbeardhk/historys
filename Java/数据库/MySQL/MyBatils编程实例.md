@@ -56,3 +56,19 @@ Integer resumeNum = (Integer)usageResume.get("resumeNum");
         and basic.education = #{queryParam.education}
         </if>
 ```
+
+> 只修改date的年月日,不修改时分秒!
+
+```Java
+<update id="updateStarAndEndTime">
+      UPDATE odrm_interviewer_scheduling_t scheduling
+      SET
+        interview_start_time = ADDTIME( date( #{dateString} ) + INTERVAL 0 HOUR, time( interview_start_time ) ),
+        interview_end_time = ADDTIME( date( #{dateString} ) + INTERVAL 0 HOUR, time( interview_end_time ) )
+      WHERE
+        scheduling.is_scheduling_effectiveness = 0
+        AND scheduling.is_cache = 0
+        AND scheduling.resume_id = #{resumeId}
+        AND scheduling.phase_type = #{phaseType}
+    </update>
+```
