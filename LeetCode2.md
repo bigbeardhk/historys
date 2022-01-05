@@ -1,0 +1,225 @@
+```java
+
+package com.huawei.it.omp.odrm.util;
+
+import com.huawei.it.omp.odrm.annotation.Encrypted;
+import com.huawei.it.omp.odrm.annotation.InitialCertificate;
+import com.huawei.it.omp.odrm.annotation.InitialCertificateType;
+import com.huawei.it.omp.odrm.annotation.InitialTime;
+import com.huawei.it.omp.odrm.annotation.InitialUser;
+import com.huawei.it.omp.odrm.annotation.InitialZero;
+import com.huawei.it.omp.odrm.annotation.OdDecimalScope;
+import com.huawei.it.omp.odrm.annotation.OdFiledLength;
+import com.huawei.it.omp.odrm.annotation.OdNotEmpty;
+import com.huawei.it.omp.odrm.annotation.OdPatternFiled;
+import com.huawei.it.omp.odrm.common.core.ODRMJsonResult;
+import com.huawei.it.omp.odrm.constant.ResumeConstant;
+import com.huawei.it.omp.odrm.dao.model.resume.InitialBase;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+/**
+ * od招聘系统公用工具类
+ *
+ * @author lWX1023987
+ * @since 2021-03-05
+ */
+public class OdrmUtils {
+    /**
+     * 根据相应的注解给相应字段赋值写入数据库
+     *
+     * @param data 填值实体
+     * @param initialBase 初始化值
+     * @throws IllegalAccessException 反射解析实体异常
+     */
+    public static <T> void setDefaultDataByWrite(T data, InitialBase initialBase) throws IllegalAccessException {
+        // 循环所有字段
+        for (Field field : data.getClass().getDeclaredFields()) {
+            field.setAccessible(true);
+            if (field.getAnnotation(InitialTime.class) != null) {
+                field.set(data, new Date());
+            }
+            if (field.getAnnotation(InitialUser.class) != null) {
+                field.set(data, initialBase.getUserName());
+            }
+            if (field.getAnnotation(InitialZero.class) != null) {
+                field.set(data, ResumeConstant.InitialData.STATE_ZERO);
+            }
+            if (initialBase.getCertificateNumber() != null) {
+                if (field.getAnnotation(InitialCertificate.class) != null) {
+                    field.set(data, initialBase.getCertificateNumber());
+                }
+                if (field.getAnnotation(InitialCertificateType.class) != null) {
+                    field.set(data, ResumeConstant.InitialData.CERTIFICATE_TYPE);
+                }
+            }
+        }
+    }
+
+    /**
+     * 根据相应的注解给相应字段进行处理，返回前端
+     *
+     * @param data 填值实体
+     * @throws IllegalAccessException 反射解析实体异常
+     */
+    public static <T> void setDefaultDataByRead(T data) throws IllegalAccessException {
+        // 获取父类及子类的所有变量
+        List<Field> allField = new ArrayList<>();
+        allField.addAll(Arrays.asList(data.getClass().getDeclaredFields()));
+        allField.addAll(Arrays.asList(data.getClass().getSuperclass().getDeclaredFields()));
+        // 循环所有字段
+        for (Field field : allField) {
+            field.setAccessible(true);
+            if (field.getAnnotation(Encrypted.class) != null) {
+                if (field.get(data) != null) {
+                    String encryptedStr = null;
+                    if (field.get(data) instanceof String) {
+                        encryptedStr = (String) field.get(data);
+                    }
+                    if (encryptedStr != null) {
+                        // 若取出对应的为加密字段，就根据相对应的标识进行加密处理
+                        Encrypted encrypted = field.getAnnotation(Encrypted.class);
+                        if (encrypted.encryptedType() == ResumeConstant.AnnotationMark.ID_CARD_NUMBER) {
+                            field.set(data,
+                                    encryptedStr.replaceAll(ResumeConstant.Regularization.ID_CARD_REPLACE_REGULARIZATION,
+                                            ResumeConstant.ID_CARD_FORMAT));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 对传入参数进行字段校验
+     *
+     * @param paramObj 传入实体
+     * @return the odrmjson result <?>
+     * @throws IllegalAccessException illegal access exception
+     * @throws UnsupportedEncodingException unsupported encoding exception
+     */
+    public static <T> ODRMJsonResult<?> filedVerification(T paramObj)
+        throws IllegalAccessException, UnsupportedEncodingException {
+        // 获取父类及子类的所有变量
+        List<Field> allField = new ArrayList<>();
+        allField.addAll(Arrays.asList(paramObj.getClass().getDeclaredFields()));
+        allField.addAll(Arrays.asList(paramObj.getClass().getSuperclass().getDeclaredFields()));
+        // 字段校验异常集合
+        StringBuilder paramErrors = new StringBuilder();
+
+        // 循环所有字段
+        for (Field field : allField) {
+            field.setAccessible(true);
+            String fileName = field.getName();
+            // 判断是否判空
+            OdNotEmpty notEmpty = field.getAnnotation(OdNotEmpty.class);
+            if (notEmpty != null) {
+                if (field.get(paramObj) == null || (field.get(paramObj) != null && notEmpty.isString()
+                    && StringUtils.isEmpty(String.valueOf(field.get(paramObj))))) {
+                    paramErrors.append("字段：[")
+                        .append(notEmpty.fileName().isEmpty() ? fileName : notEmpty.fileName())
+                        .append("]不能为空;").append(System.lineSeparator());
+                }
+            }
+            OdFiledLength odFiledLength = field.getAnnotation(OdFiledLength.class);
+            if (odFiledLength != null) {
+                if (field.get(paramObj) != null && field.getType() == String.class) {
+                    // 判断字段是否为字符串类型，若为字符串类型进行长度判断
+                    int strLength = String.valueOf(field.get(paramObj)).length();
+                    if (strLength < odFiledLength.minLength() || strLength > odFiledLength.maxLength()) {
+                        paramErrors.append("字段：[")
+                            .append(odFiledLength.fileName().isEmpty() ? fileName : odFiledLength.fileName())
+                            .append("]字符长度不在").append(odFiledLength.minLength()).append("到")
+                            .append(odFiledLength.maxLength()).append("之间");
+                    }
+                }
+            }
+            operatingPatten(paramObj, paramErrors, field);
+            operatingDecimal(paramObj, paramErrors, field, fileName);
+        }
+        if (paramErrors.length() > 0) {
+            return ODRMJsonResult.errorReturnByMsg(paramErrors.toString());
+        }
+        return ODRMJsonResult.successReturn();
+    }
+
+    private static <T> void operatingDecimal(T paramObj, StringBuilder paramErrors,
+            Field field, String fileName) throws IllegalAccessException {
+        if (field.getAnnotation(OdDecimalScope.class) != null) {
+            if (field.get(paramObj) != null) {
+                OdDecimalScope odDecimalScope = field.getAnnotation(OdDecimalScope.class);
+                if (field.getType() == Byte.class || field.getType() == Integer.class
+                    || field.getType() == Double.class || field.getType() == Long.class
+                    || field.getType() == BigDecimal.class || field.getType() == Float.class) {
+                    BigDecimal fieldData = new BigDecimal(String.valueOf(field.get(paramObj)));
+
+                    // 最大值
+                    BigDecimal maxData = new BigDecimal(odDecimalScope.max());
+
+                    // 最小值
+                    BigDecimal minData = new BigDecimal(odDecimalScope.min());
+
+                    // 判断对应的字段是否在最大值和最小值之间
+                    if (fieldData.compareTo(maxData) > 0 || fieldData.compareTo(minData) < 0) {
+                        paramErrors.append("字段：[")
+                            .append(odDecimalScope.fileName().isEmpty() ? fileName : odDecimalScope.fileName())
+                            .append("]数值大小").append(minData).append("到").append(maxData).append("之间");
+                    }
+                }
+            }
+        }
+    }
+
+    private static <T> void operatingPatten(T paramObj,
+            StringBuilder paramErrors, Field field) throws IllegalAccessException {
+        if (field.getAnnotation(OdPatternFiled.class) != null) {
+            if (field.get(paramObj) != null && field.getType() == String.class) {
+                // 判断字段类型，并进行不同的正则校验
+                int patternType = field.getAnnotation(OdPatternFiled.class).patternType();
+                String filedStr = String.valueOf(field.get(paramObj));
+                // 身份证
+                if (ResumeConstant.AnnotationMark.ID_CARD_NUMBER == patternType) {
+                    // 判断身份证中的X是否为大写,若为小写自动转为大写
+                    if (filedStr.contains("x")) {
+                        field.set(paramObj, filedStr.toUpperCase(Locale.ROOT));
+                    }
+                    if (!filedStr.matches(ResumeConstant.Regularization.ID_CARD_REGULARIZATION)) {
+                        paramErrors.append("身份证位数不足18位或年月日错位");
+                    }
+                } else if (ResumeConstant.AnnotationMark.PHONE == patternType) {
+                    // 手机号格式校验
+                    if (!filedStr.matches(ResumeConstant.Regularization.PHONE_REGULARIZATION)) { // 只判断十一位数字
+                        paramErrors.append("手机号字段格式不正确");
+                    }
+                } else if (ResumeConstant.AnnotationMark.EMAIL == patternType) {
+                    // 邮箱格式校验
+                    if (!filedStr.matches(ResumeConstant.Regularization.EMAIL_REGULARIZATION)) {
+                        paramErrors.append("邮箱格式不正确");
+                    }
+                } else if (ResumeConstant.AnnotationMark.URL == patternType) {
+                    // URL地址格式校验
+                    if (!filedStr.matches(ResumeConstant.Regularization.URL_REGULARIZATION)) {
+                        paramErrors.append("URL地址格式不正确");
+                    }
+                } else {
+                    paramErrors.append("信息错误");
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+```
