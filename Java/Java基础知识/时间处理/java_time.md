@@ -20,8 +20,14 @@
 
 ```
 Date date = new Date();
-Instant createInstant = date.toInstant();
-LocalDate createDate = createInstant.atZone(ZoneId.systemDefault()).toLocalDate();
+// Instant createInstant = date.toInstant();
+LocalDate createDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+```
+### LocalDate转化为Date
+
+```
+LocalDate createDate = LocalDate.now();
+Date now = Date.from(createDate.atZone(ZoneId.systemDefault()).toInstant());
 ```
 
 ### 日期相差时间问题
@@ -29,7 +35,7 @@ LocalDate createDate = createInstant.atZone(ZoneId.systemDefault()).toLocalDate(
 - 1. 如: long days = ChronoUnit.MONTHS.between(startDate, endDate);</p>
 > 其真正含义为:两个日期的相差0.1个月份,只不过返回整数值0; </p>
 - 2. 月份相差的计数
-> (y1,M1,d1)与(y2,M2,d2) y1-y2 = m; M1-M = n;</p>
+> (y1,M1,d1)与(y2,M2,d2) y1-y2 = m; M1-M2 = n;</p>
 > 如果d1<d2,相差的月份就12m+n-1,则,d1>=d2,就为12m+n;
 <details>
 <summary>代码演示:</summary>
