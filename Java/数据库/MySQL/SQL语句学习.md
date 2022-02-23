@@ -47,5 +47,40 @@ CREATE TABLE `odrm_resume_exceptions_t` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='简历例外事项表';
 
+update odrm_interviewer_information_t 
+set interview_language = CONCAT(',',interview_language,',')
+where 
+(interview_language != null or  interview_language <> '')
+
+-- ==================刷新排班表时间窗字段===================
+-- 第一步执行
+update odrm_interviewer_scheduling_t
+set time_window = 2
+where
+isnull(time_window)
+and 
+DATE_FORMAT(interview_start_time,'%H:%i:%s') between '18:00:00' and '23:59:59'
+;
+
+-- 第二步执行
+update odrm_interviewer_scheduling_t
+set time_window = 1
+where
+isnull(time_window)
+and 
+DATE_FORMAT(interview_start_time,'%H:%i:%s') between '12:00:00' and '17:59:59'
+;
+
+-- 第三步执行
+update odrm_interviewer_scheduling_t
+set time_window = 0
+where
+isnull(time_window)
+and not isnull(interview_start_time)
+;
+
+
+
 ```
+
 
