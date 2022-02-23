@@ -24,3 +24,28 @@ ALTER  TABLE  table_name   DROP COLUMN;
 
 ALTER TABLE  table_name   ADD COLUMN  show_flag  tinyint(4)  DEFAULT NULL COMMENT '是否应该出现在offer沟通栏(0 出现 1 不出现)' AFTER delete_flag;
 
+
+```sql
+
+drop table if exists odrm_resume_exceptions_t;
+CREATE TABLE `odrm_resume_exceptions_t` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `resume_id` bigint(20) NOT NULL COMMENT '简历主键ID',
+  `exceptions_type` tinyint(4) DEFAULT NULL COMMENT '例外事项类型(0 一般 1 严重)',
+  `exceptions_description` varchar(2000) DEFAULT NULL COMMENT '加入例外原因',
+  `exceptions_removal_reason` varchar(2000) DEFAULT NULL COMMENT '解除例外原因',
+  `exceptions_status` tinyint(4) DEFAULT NULL COMMENT '例外事项状态(0 存在例外事项 1 例外事项解除)',
+  `exceptions_time` datetime DEFAULT NULL COMMENT '加入例外时间',
+  `removal_time` datetime DEFAULT NULL COMMENT '解除例外时间',
+  `status` tinyint(4) DEFAULT NULL COMMENT '数据表状态 (0 无效 1 有效)',
+  `created_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `created_by` varchar(50) DEFAULT NULL COMMENT '创建人账号',
+  `created_id` bigint(20) DEFAULT NULL COMMENT '创建人ID',
+  `modified_time` datetime DEFAULT NULL COMMENT '修改时间',
+  `modified_by` varchar(50) DEFAULT NULL COMMENT '修改人账号',
+  `modified_id` bigint(20) DEFAULT NULL COMMENT '修改人ID',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='简历例外事项表';
+
+```
+
