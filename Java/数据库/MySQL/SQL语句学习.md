@@ -86,4 +86,5 @@ and not isnull(interview_start_time)
 
 - https://www.cnblogs.com/klvchen/p/10137117.html
 - https://www.cnblogs.com/ggjucheng/archive/2012/11/11/2765237.html
+- https://www.cnblogs.com/ggjucheng/archive/2012/11/07/2758058.html
 
